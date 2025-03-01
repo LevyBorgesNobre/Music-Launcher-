@@ -13,11 +13,11 @@ export const GlobalStyle = createGlobalStyle`
 }
 
 body{
-    background-color: linear-gradient(135deg, #343330, #595857);
+    background: radial-gradient(circle, #343330, #595857);
+
 }
 
 body, input, button{
     font-weight:normal;
-    font-size:2.1rem;
 }
 `
