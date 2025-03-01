@@ -13,8 +13,7 @@ export const GlobalStyle = createGlobalStyle`
 }
 
 body{
-    background: radial-gradient(circle, #343330, #595857);
-
+    background-color: ${props=> props.theme['background-color']};
 }
 
 body, input, button{

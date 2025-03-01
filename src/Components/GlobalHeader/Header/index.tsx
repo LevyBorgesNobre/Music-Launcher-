@@ -1,5 +1,10 @@
+import MLauncherLogo from '../../../images/Logo.svg'
+import { Div } from './styyles'
+
 export function Header(){
     return(
-        <h1>Header</h1>
+       <Div>
+       <img src={MLauncherLogo} alt="Logo do site" />
+       </Div>
     )
 }
