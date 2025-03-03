@@ -1,9 +1,9 @@
-import { Container, Input, InputContainer, LoginContainer, ValidationButton, ValidationContainer } from "./styles";
+import {  Input, InputContainer, LoginContainer, LoginPageContainer, ValidationButton, ValidationContainer } from "./styles";
 
 export function Login(){
     return(
        <>
-       <Container>
+        <LoginPageContainer>
         <LoginContainer>
             <InputContainer>
              <p>Email</p>
@@ -24,7 +24,7 @@ export function Login(){
                 <ValidationButton>Login</ValidationButton>
             </ValidationContainer>
         </LoginContainer>
-       </Container>
+        </LoginPageContainer>
        </>
     )
 }

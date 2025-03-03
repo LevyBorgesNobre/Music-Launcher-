@@ -1,19 +1,13 @@
 import styled from "styled-components";
 
-export const Container = styled.div`
- height: 48rem;
- width:100%;
- gap: 10px;
- border-top: 1px solid ${props=> props.theme['white']};
- border-bottom: 1px solid ${props=> props.theme['white']};
- background: radial-gradient(circle, #343330, #595857);
- display: flex;
- align-items: center;
- justify-content: center;
-`;
-
+export const LoginPageContainer = styled.div`
+display: flex;
+justify-content: center;
+align-items: center;
+`
 export const LoginContainer = styled.div`
- height: 24rem;
+ height: 22rem;
+ margin-top: 10rem;
  width: 35rem;
  background-color: #E5E5E5;
  border-radius:10px;
@@ -43,7 +37,20 @@ height: 2.5rem;
 width:29rem;
 padding:0.5rem;
 border-radius:5px;
-border:1px ${props=> props.theme['#595857']};
+border: transparent;
+
+&::placeholder {
+    font-size: 0.9rem;
+    padding-left: 10px; 
+    transition: all 0.3s ease; 
+  }
+
+  &:focus {
+    outline: 1px solid ${(props) => props.theme['base-text']};
+    transition:0.5s;
+  }
+
+  
 `;
 
 export const ValidationContainer = styled.div`
@@ -51,7 +58,7 @@ export const ValidationContainer = styled.div`
  width:29rem;
  display: flex;
  flex-direction: column;
- gap: 0.5rem;
+ gap: 1rem;
  margin-top:2rem;
  p{
     font-family: "Baloo 2", serif;

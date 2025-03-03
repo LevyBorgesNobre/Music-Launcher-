@@ -1,5 +1,5 @@
 import MLauncherLogo from '../../../images/Logo.svg'
-import { Div } from './styyles'
+import { Div } from './styles'
 
 export function Header(){
     return(
