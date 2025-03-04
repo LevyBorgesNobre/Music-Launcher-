@@ -7,5 +7,6 @@ export const defaultTheme={
   'base-music':'#595857',
   'white':'#F5F5F5' , 
   'background-color':'#343330',
-  'base-border':'#595857'
+  'base-border':'#595857',
+  'add-button':'##FFA500'
 }
