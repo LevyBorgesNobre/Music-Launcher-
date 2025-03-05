@@ -1,5 +1,7 @@
+import { MusicTrack } from "./MusicTrack"
+
 export function PlayList(){
     return(
-        <h1>Playlist</h1>
+     <MusicTrack></MusicTrack>
     )
 }
