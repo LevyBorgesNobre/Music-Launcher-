@@ -35,6 +35,10 @@ font-family: "Baloo 2", serif;
 font-style: normal;
 color: #000000;
 font-size:1rem;
+max-width: 7ch;
+white-space: nowrap; 
+overflow: hidden; 
+text-overflow: ellipsis; 
 margin-top:1.2rem;
 `
 export const ConfigButtons  = styled.div`

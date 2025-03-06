@@ -19,7 +19,19 @@ export function MusicTrack(){
         Img=""
         />
          <TuneRepository
-        name="Monster"
+        name="Animal I Have Become"
+        Img=""
+        />
+         <TuneRepository
+        name="Animal I Have Become"
+        Img=""
+        />
+         <TuneRepository
+        name="Animal I Have Become"
+        Img=""
+        />
+         <TuneRepository
+        name="Animal I Have Become"
         Img=""
         />
         
