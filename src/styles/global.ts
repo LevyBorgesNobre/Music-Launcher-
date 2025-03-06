@@ -13,7 +13,7 @@ export const GlobalStyle = createGlobalStyle`
 }
 
 body{
-     background: radial-gradient(circle, #343330, #595857);
+     background:linear-gradient(180deg, #343330 0%, #595857 100%);;
      height: 100vh;
 }
 
