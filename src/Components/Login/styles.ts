@@ -60,13 +60,18 @@ export const ValidationContainer = styled.div`
  flex-direction: column;
  gap: 1rem;
  margin-top:2rem;
- p{
+`;
+
+export const ChangeMethodButton = styled.button`
     font-family: "Baloo 2", serif;
     font-style: normal;
     font-size:medium;
     color: ${props=> props.theme['blue']};
-} 
-`;
+    background:transparent;
+    border: transparent;
+    display: flex;
+    justify-content: flex-start;
+`
 
 export const ValidationButton = styled.button`
  height: 2.5rem;
