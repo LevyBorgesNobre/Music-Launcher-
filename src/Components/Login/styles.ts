@@ -82,3 +82,10 @@ export const ValidationButton = styled.button`
  border: transparent;
  color: ${props=> props.theme['white']};
 `
+
+export const ErrorMessage = styled.span`
+font-family: "Baloo 2", serif;
+font-style: normal;
+font-size:medium;
+ color:red;
+`

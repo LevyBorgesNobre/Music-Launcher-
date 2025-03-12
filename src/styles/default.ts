@@ -8,5 +8,5 @@ export const defaultTheme={
   'white':'#F5F5F5' , 
   'background-color':'#343330',
   'base-border':'#595857',
-  'add-button':'##FFA500'
+  'add-button':'##FFA500',
 }
