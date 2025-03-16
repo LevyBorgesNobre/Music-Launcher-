@@ -13,7 +13,7 @@ import * as zod from "zod";
 import { useForm } from "react-hook-form";
 import { api } from "../../lib/axios";
 
-export function Login() {
+export function Authenticate() {
   const [authMethod, setAuthMethod] = useState('Login');
   const [buttonMethod, setButtonMethod] = useState('Register')
   const formConfiguration = zod.object({
@@ -23,7 +23,7 @@ export function Login() {
       .nonempty({ message: 'O Email é obrigatório' }),
 
     senha: zod.string()
-      .min(6, { message: 'O mínimo de caracteres é 6' })
+      .min(6, { message: 'A senha deve ter no mínimo 6 caracteres' })
       .max(50, { message: 'O máximo de caracteres é 50' })
       .nonempty({ message: 'A senha é obrigatória' })
   });
@@ -49,8 +49,28 @@ export function Login() {
     }
   }
   
-  function Login(data: formConfigurationType){
+  async function Login(data: formConfigurationType){
+   try {
+     const reponse = await api.post('/tokens', {
+     email: data.Email,
+     password: data.senha
+  });
+
+  reset({
+    Email: '',
+    senha: ''
+  });
+
+  const jwt = reponse.data.token
+  localStorage.setItem('jwt', jwt)
+ } catch {
+    setError("Email", {
+    type: "manual",
+    message: "Tente novamente mais tarde",
+    });
+ } 
   }
+
   async function Register(data: formConfigurationType){
     try {
       await api.post('/users', {
@@ -63,10 +83,9 @@ export function Login() {
         senha: ''
       });
 
-    } 
-    catch (error: any) {
-      if (error.response?.status === 400) {
-        const errorData = error.response.data;
+    } catch (error: any) {
+        if (error.response?.status === 400) {
+         const errorData = error.response.data;
         
         if (errorData.message === "Já existe uma conta com esse e-mail. Faça login.") {
           setError("Email", {
