@@ -1,18 +1,23 @@
 import styled from "styled-components";
 
+export const Container  = styled.div`
+display: grid;
+height: 100%;
+margin-top: 4rem;
+grid-template-columns: repeat(7, 206px);
+row-gap: 8rem;
+justify-content: space-around;
+`;
+
 export const Music = styled.img`
-height:13rem;
- width:13rem;
  background-color: ${props=> props.theme['white']};
  border-radius:50%;
-position: relative;
+ position: relative;
 `;
 
 export const Div = styled.div`
 display: flex;
 flex-direction: column;
-gap: 0.5rem;
-
 `;
 
 export const MusicName = styled.div`
@@ -27,7 +32,7 @@ export const MusicName = styled.div`
 
     &:hover{
     opacity: 1;
-}
+    }
 `
 
 export const Icon = styled.div`

@@ -9,6 +9,5 @@ api.interceptors.request.use((config)=> {
     if(jwt){
     config.headers.Authorization = `Bearer ${jwt}`
     }
-
     return config
 })

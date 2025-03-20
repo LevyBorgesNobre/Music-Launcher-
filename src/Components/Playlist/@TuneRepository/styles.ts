@@ -15,12 +15,11 @@ justify-content: space-between;
 `;
 
 export const MusicData = styled.div`
-height:10rem;
-width:10rem;
+width:15rem;
 display: flex;
 gap: 1rem;
-margin-top:0.5rem;
-justify-content:center;
+align-items: center;
+margin-left: 1rem;
 `;
 
 export const MusicTrackImage = styled.img`
@@ -35,11 +34,10 @@ font-family: "Baloo 2", serif;
 font-style: normal;
 color: #000000;
 font-size:1rem;
-max-width: 7ch;
+max-width: 30ch;
 white-space: nowrap; 
 overflow: hidden; 
 text-overflow: ellipsis; 
-margin-top:1.2rem;
 `
 export const ConfigButtons  = styled.div`
 height: 5rem;

@@ -11,13 +11,14 @@ justify-content: space-between;
 `;
 
 export const HeaderButton = styled.button`
-max-width: 7rem;
+max-width: 10rem;
+min-width:4rem;
 border: transparent;
 background-color:${props=> props.theme['white']};
 margin-right:4rem;
 border-radius:5px;
 font-family: "Baloo 2", serif;
 font-size:medium;
-padding: 5px;
+padding: 2px;
 white-space: nowrap;
 `
