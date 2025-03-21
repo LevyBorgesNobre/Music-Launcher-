@@ -1,10 +1,20 @@
+import { useQuery } from "@tanstack/react-query";
+import { api } from "../../../lib/axios";
 import { TuneRepository } from "../@TuneRepository";
 import { IconsContainer, PlaylistContainer, TuneContainer } from "./styles";
 import { Icons, IconButtons } from "./styles";
 import { PlusCircle, PlayCircle, ShuffleAngular } from "phosphor-react";
-
+import { Music } from "../../Home/MusicLibrary";
 export function MusicTrack(){
-    const FakeData = Array.from({ length: 20 });
+    const { data: Musics = [] } = useQuery<Music[]>({
+        queryKey: ['userMusics'],
+        queryFn: async () => {
+          const response = await api.get(`/users`)
+          return response.data.Music
+        },
+      }
+    )
+
     return(
         <>
         <PlaylistContainer>
@@ -16,11 +26,13 @@ export function MusicTrack(){
         </Icons>
         </IconsContainer>
         <TuneContainer>
-        {FakeData.map((_, index) => {
+        {Musics.map((music) => {
             return(
                 <TuneRepository
-                name={`${index}`}
-                Img=""
+                id={music.id}
+                key={music.id}
+                name={music.title}
+                Img={music.thumbnailUrl}
                 />
             )
         })}

@@ -1,12 +1,23 @@
+import { api } from "../../../lib/axios";
 import { IconButtons, MainMusicTrack, MusicData, MusicTrackImage, MusicTrackName, ConfigButtons } from "./styles";
 import {  ShuffleAngular, Trash, Play } from "phosphor-react";
 
 interface TuneRepositoryData{
  name: string;
  Img: string;
+ id: number
 }
 
-export function TuneRepository({name, Img} : TuneRepositoryData){
+export function TuneRepository({name, Img, id} : TuneRepositoryData){
+    async function deleteMusicFromUser(){
+        try {
+            await api.delete('/music', {
+                id,
+            })
+        } catch (error) {
+            console.log(error)
+        }
+    }
     return(
         <>
          <MainMusicTrack>
@@ -16,7 +27,9 @@ export function TuneRepository({name, Img} : TuneRepositoryData){
             </MusicData>
 
             <ConfigButtons>
-                <IconButtons><Trash size={25} color="#000000" weight="fill"/></IconButtons>
+                <IconButtons onClick={async() => {
+                    await deleteMusicFromUser()
+                }}><Trash size={25} color="#000000" weight="fill"/></IconButtons>
                 <IconButtons><ShuffleAngular size={25} color="#000000" weight="fill"/></IconButtons>
                 <IconButtons><Play size={25} color="#000000" weight="fill"/></IconButtons>
             </ConfigButtons>

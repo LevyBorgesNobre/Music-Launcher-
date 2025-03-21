@@ -25,6 +25,7 @@ margin-left: 1rem;
 export const MusicTrackImage = styled.img`
  height: 4rem;
  width:4rem;
+ object-fit: cover;
  background-color: #E3E3E3;
  border-radius:5px;
 `;

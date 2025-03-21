@@ -23,7 +23,7 @@ export function MusicLibrary(){
             {
                 firstSixTeenMusics.map(music => {
                     return(
-                        <MusicCard Img={music.thumbnailUrl} Name={music.title} id={music.id}/>
+                        <MusicCard Img={music.thumbnailUrl} key={music.id} Name={music.title} id={music.id}/>
                     )
                 })
             }

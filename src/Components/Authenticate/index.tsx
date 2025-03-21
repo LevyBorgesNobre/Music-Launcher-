@@ -12,8 +12,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as zod from "zod";
 import { useForm } from "react-hook-form";
 import { api } from "../../lib/axios";
+import { useNavigate } from "react-router-dom";
 
 export function Authenticate() {
+
+  const navigate = useNavigate();
   const [authMethod, setAuthMethod] = useState('Login');
   const [buttonMethod, setButtonMethod] = useState('Register')
   const formConfiguration = zod.object({
@@ -39,7 +42,12 @@ export function Authenticate() {
   } = useForm<formConfigurationType>({
     resolver: zodResolver(formConfiguration)
   });
+  const jwt = localStorage.getItem('jwt')
  
+  if(jwt){
+   navigate('/Home')
+  }
+
   async function handleConfigurationForm(data: formConfigurationType) {
     if(buttonMethod === 'Register'){
       Register(data)
@@ -50,25 +58,26 @@ export function Authenticate() {
   }
   
   async function Login(data: formConfigurationType){
-   try {
-     const reponse = await api.post('/tokens', {
-     email: data.Email,
-     password: data.senha
-  });
-
-  reset({
-    Email: '',
-    senha: ''
-  });
-
-  const jwt = reponse.data.token
-  localStorage.setItem('jwt', jwt)
- } catch {
-    setError("Email", {
-    type: "manual",
-    message: "Tente novamente mais tarde",
-    });
- } 
+      try {
+        const reponse = await api.post('/tokens', {
+        email: data.Email,
+        password: data.senha,
+     });
+     navigate('/Home');
+   
+     reset({
+       Email: '',
+       senha: ''
+     });
+   
+     const jwt = reponse.data.token
+     localStorage.setItem('jwt', jwt)
+    } catch {
+       setError("Email", {
+       type: "manual",
+       message: "Tente novamente mais tarde",
+       });
+    } 
   }
 
   async function Register(data: formConfigurationType){
