@@ -1,3 +1,4 @@
+import { useQueryClient } from "@tanstack/react-query";
 import { api } from "../../../lib/axios";
 import { IconButtons, MainMusicTrack, MusicData, MusicTrackImage, MusicTrackName, ConfigButtons } from "./styles";
 import {  ShuffleAngular, Trash, Play } from "phosphor-react";
@@ -9,11 +10,14 @@ interface TuneRepositoryData{
 }
 
 export function TuneRepository({name, Img, id} : TuneRepositoryData){
+    const queryClient = useQueryClient();
     async function deleteMusicFromUser(){
         try {
             await api.delete('/music', {
-                id,
+                data: { id },
             })
+            queryClient.invalidateQueries({ queryKey: ['userMusics'] });
+            console.log('foi')
         } catch (error) {
             console.log(error)
         }
@@ -25,7 +29,6 @@ export function TuneRepository({name, Img, id} : TuneRepositoryData){
                 <MusicTrackImage src={Img} alt="Imagem da capa da musica"/>
                 <MusicTrackName>{name}</MusicTrackName>
             </MusicData>
-
             <ConfigButtons>
                 <IconButtons onClick={async() => {
                     await deleteMusicFromUser()

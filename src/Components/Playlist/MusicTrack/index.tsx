@@ -5,7 +5,9 @@ import { IconsContainer, PlaylistContainer, TuneContainer } from "./styles";
 import { Icons, IconButtons } from "./styles";
 import { PlusCircle, PlayCircle, ShuffleAngular } from "phosphor-react";
 import { Music } from "../../Home/MusicLibrary";
-export function MusicTrack(){
+
+  export function MusicTrack(){
+
     const { data: Musics = [] } = useQuery<Music[]>({
         queryKey: ['userMusics'],
         queryFn: async () => {
