@@ -5,6 +5,8 @@ import { IconsContainer, PlaylistContainer, TuneContainer } from "./styles";
 import { Icons, IconButtons } from "./styles";
 import { PlusCircle, PlayCircle, ShuffleAngular } from "phosphor-react";
 import { Music } from "../../Home/MusicLibrary";
+import { useState } from "react";
+import { AddMusic } from "../AddMusic";
 
   export function MusicTrack(){
 
@@ -16,13 +18,16 @@ import { Music } from "../../Home/MusicLibrary";
         },
       }
     )
+    const [isChecked, setIsChecked] = useState(false)
+
 
     return(
         <>
+        { isChecked === false? 
         <PlaylistContainer>
         <IconsContainer>
         <Icons>
-            <IconButtons><PlusCircle size={40} color="#000000" weight="fill"/></IconButtons>
+            <IconButtons onClick={()=>{setIsChecked(true)}}><PlusCircle size={40} color="#000000" weight="fill"/></IconButtons>
             <IconButtons><PlayCircle size={40} color="#000000" weight="fill"/></IconButtons>
             <IconButtons><ShuffleAngular size={40} color="#000000" weight="fill"/></IconButtons>
         </Icons>
@@ -40,6 +45,7 @@ import { Music } from "../../Home/MusicLibrary";
         })}
         </TuneContainer>
         </PlaylistContainer>
+        : <AddMusic/>}
         </>
     )
 }

@@ -47,7 +47,10 @@ export function Authenticate() {
   if(jwt){
    navigate('/Home')
   }
-
+  function handleChangeMethod() {
+    setAuthMethod(authMethod === 'Register' ? 'Login' : 'Register') 
+    setButtonMethod(buttonMethod !== 'Register' ? 'Register' : 'Login')
+  }
   async function handleConfigurationForm(data: formConfigurationType) {
     if(buttonMethod === 'Register'){
       Register(data)
@@ -134,9 +137,7 @@ export function Authenticate() {
 
         <ValidationContainer>
           <ChangeMethodButton 
-            onClick={() => {
-              setAuthMethod(authMethod === 'Register' ? 'Login' : 'Register') 
-              setButtonMethod(buttonMethod !== 'Register' ? 'Register' : 'Login')}}
+            onClick={handleChangeMethod}
           >
             {authMethod}
           </ChangeMethodButton>
