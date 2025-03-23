@@ -20,7 +20,6 @@ import { AddMusic } from "../AddMusic";
     )
     const [isChecked, setIsChecked] = useState(false)
 
-
     return(
         <>
         { isChecked === false? 
@@ -45,7 +44,8 @@ import { AddMusic } from "../AddMusic";
         })}
         </TuneContainer>
         </PlaylistContainer>
-        : <AddMusic/>}
+        : <AddMusic
+        />}
         </>
     )
 }
