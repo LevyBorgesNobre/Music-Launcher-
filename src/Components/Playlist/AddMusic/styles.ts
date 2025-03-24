@@ -50,7 +50,7 @@ export const Input  = styled.input`
  }
 `;
 
-export const Label = styled.label`
+export const AddMusicButton = styled.button`
  height: 2.9rem;
  width:22rem;
  background-color: ${props=> props.theme['white']};
@@ -59,12 +59,21 @@ export const Label = styled.label`
  display: flex;
  padding-left:0.7rem;
  white-space: nowrap;
+ border: transparent;
+ display: flex;
+ align-items: center;
+ justify-content: center;
  
  p{
-    display: flex;
-    align-items: center;
     color: ${props=> props.theme['text-default']};
+    font-size: 1rem;
  }
+`;
+
+export const InputContainer = styled.div`
+ height:3rem ;
+ flex-direction: column;
+ gap: 0.2rem;
 `;
 
 export const InputFile = styled.input`
@@ -74,6 +83,7 @@ export const InputFile = styled.input`
  background-color: ${props=> props.theme['white']};
  opacity: 0;
 `;
+
 
 
 
