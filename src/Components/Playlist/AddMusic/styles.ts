@@ -50,26 +50,6 @@ export const Input  = styled.input`
  }
 `;
 
-export const AddMusicButton = styled.button`
- height: 2.9rem;
- width:22rem;
- background-color: ${props=> props.theme['white']};
- border-radius:10px;
- font-family: "Baloo 2", serif;
- display: flex;
- padding-left:0.7rem;
- white-space: nowrap;
- border: transparent;
- display: flex;
- align-items: center;
- justify-content: center;
- 
- p{
-    color: ${props=> props.theme['text-default']};
-    font-size: 1rem;
- }
-`;
-
 export const InputContainer = styled.div`
  height:3rem ;
  flex-direction: column;

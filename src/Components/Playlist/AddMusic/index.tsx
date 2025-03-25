@@ -1,5 +1,5 @@
 import { AddMusicButton, Container, InputContainer, InputFile, Label, PlusCircleButton, SpaceToAddMusic, Title } from "./styles";
-import { PlusCircle, YoutubeLogo } from "phosphor-react";
+import { ArrowUpLeft, ArrowUUpLeft, PlusCircle, YoutubeLogo } from "phosphor-react";
 import { Input } from "./styles";
 import { useState } from "react";
 import { MusicTrack } from "../MusicTrack";
@@ -51,11 +51,17 @@ export function AddMusic(){
           }
         }
        
+       function handleKeyPress(event: React.KeyboardEvent<HTMLInputElement>){
+        if(event.key === 'Enter'){
+          handleSubmit(handleAddMusic)()
+        }
+       }
+
     return(
          <>
          {returnToPlaylist === false ? 
            <Container>
-           <PlusCircleButton onClick={()=>{setReturnToPlaylist(true)}}><PlusCircle size={40} color="#000000" weight="fill"/></PlusCircleButton>
+           <PlusCircleButton onClick={()=>{setReturnToPlaylist(true)}}><ArrowUUpLeft size={40} color="#000000" weight="fill"/></PlusCircleButton>
            <SpaceToAddMusic>
                  <Title>
                   Adicione através do Youtube
@@ -66,13 +72,10 @@ export function AddMusic(){
                   type="text"
                   placeholder="Link aqui"
                   {...register('musicUrl')}
+                  onKeyDown={(event)=>{handleKeyPress(event)}}
                   />
                   {errors.musicUrl && <ErrorMessage>{errors.musicUrl.message}</ErrorMessage> }
                   </InputContainer>
-
-                    <AddMusicButton onClick={handleSubmit(handleAddMusic)}>
-                    <p>Adicionar Musica</p>
-                    </AddMusicButton>
            </SpaceToAddMusic>
          </Container>
          : Musics.length === 0 ? <PlaylistEmptyAlert/> : <MusicTrack/>}
