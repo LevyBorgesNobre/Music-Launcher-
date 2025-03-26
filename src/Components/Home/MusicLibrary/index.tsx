@@ -1,6 +1,6 @@
 import { api } from "../../../lib/axios";
 import { MusicCard } from "../MusicCard";
-import { Container } from "./styles";
+import { Container, P, TrackContainer } from "./styles";
 import { useQuery } from '@tanstack/react-query'
 export interface Music{
 		title: string,
@@ -17,8 +17,10 @@ export function MusicLibrary(){
         },
       }
     )
-    const firstSixTeenMusics = Musics.slice(0 , 15)
+    const firstSixTeenMusics = Musics.slice(0 , 14)
     return(
+    <TrackContainer>
+     <P> Nossas Sugestões :</P>
         <Container>
             {
                 firstSixTeenMusics.map(music => {
@@ -28,5 +30,7 @@ export function MusicLibrary(){
                 })
             }
         </Container>
+    </TrackContainer>
+       
     )
 }

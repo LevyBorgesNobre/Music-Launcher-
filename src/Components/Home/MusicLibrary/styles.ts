@@ -5,7 +5,7 @@ display: grid;
 height: 100%;
 margin-top: 4rem;
 grid-template-columns: repeat(7, 206px);
-row-gap: 8rem;
+row-gap: 4rem;
 justify-content: space-around;
 `;
 
@@ -50,3 +50,18 @@ opacity: 0;
 export const Span = styled.span`
 display: flex;
 `;
+
+export const P = styled.p`
+  display: flex;
+  color:#FFA500;
+  margin-left: 1rem;
+  font-size: 2.5rem;
+  font-family: "Baloo 2", serif;
+  font-weight:bold;
+  text-shadow: 2px 2px 4px rgb(137, 106, 47); 
+`;
+
+ export const TrackContainer = styled.div`
+ display: flex;
+ flex-direction: column;
+ `;
