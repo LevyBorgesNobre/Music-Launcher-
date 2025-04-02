@@ -19,6 +19,7 @@ import { AddMusic } from "../AddMusic";
       }
     )
     const [isChecked, setIsChecked] = useState(false)
+    const ReverseMusic = Musics.slice(0).reverse()
 
     return(
         <>
@@ -32,7 +33,7 @@ import { AddMusic } from "../AddMusic";
         </Icons>
         </IconsContainer>
         <TuneContainer>
-        {Musics.map((music) => {
+        {ReverseMusic.map((music) => {
             return(
                 <TuneRepository
                 id={music.id}

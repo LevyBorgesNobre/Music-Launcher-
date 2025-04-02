@@ -4,14 +4,14 @@ export const PlaylistContainer = styled.div`
 width: 90vw;
 margin-inline:auto;
 display: flex;
-margin-top: 4rem;
-height: 33rem;
+margin-top: 1rem;
+height: 43rem;
 flex-direction:column;
 display: flex;
 `;
 export const TuneContainer = styled.div`
 display: flex;
-gap: 2rem;
+gap: 1rem;
 overflow: hidden;
 overflow-y: auto;  
 padding-bottom: 5rem;
