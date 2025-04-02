@@ -64,7 +64,13 @@ export const InputFile = styled.input`
  opacity: 0;
 `;
 
-
+export const LoadingMessage = styled.p`
+ font-family: "Baloo 2", serif;
+ font-style: normal;
+ font-size:1.5rem;
+ color:red;
+ color: orange
+ `
 
 
  

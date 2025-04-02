@@ -1,4 +1,4 @@
-import { AddMusicButton, Container, InputContainer, InputFile, Label, PlusCircleButton, SpaceToAddMusic, Title } from "./styles";
+import { AddMusicButton, Container, InputContainer, InputFile, Label, LoadingMessage, PlusCircleButton, SpaceToAddMusic, Title } from "./styles";
 import { ArrowUpLeft, ArrowUUpLeft, PlusCircle, YoutubeLogo } from "phosphor-react";
 import { Input } from "./styles";
 import { useState } from "react";
@@ -7,11 +7,13 @@ import { useQuery } from "@tanstack/react-query";
 import { PlaylistEmptyAlert } from "../EmptyPlaylist/PlaylistEmptyAlert";
 import { api } from "../../../lib/axios";
 import * as zod from "zod";
-import { useForm } from "react-hook-form";
+import { set, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ErrorMessage } from "../../Authenticate/styles";
+import { useQueryClient } from '@tanstack/react-query';
 
 export function AddMusic(){
+       const queryClient = useQueryClient();
        const { data: Musics = [] } = useQuery<Music[]>({
               queryKey: ['userMusics'],
               queryFn: async () => {
@@ -21,7 +23,8 @@ export function AddMusic(){
             }
           )
       const [returnToPlaylist, setReturnToPlaylist] = useState(false)
-      
+      const [isLoading, setIsLoading] = useState(false)
+
       const addMusicFormConfig = zod.object({
         musicUrl : zod.string()
         .nonempty({message: 'Campo obrigatório'})
@@ -34,21 +37,24 @@ export function AddMusic(){
        })
        
         async function handleAddMusic(data: addMusicFormConfigType){
+          setIsLoading(true)
           try {
-           await api.post('/musics',{
+             await api.post('/music',{
               url:data.musicUrl
             })
             reset({
               musicUrl: ''
             })
+            queryClient.removeQueries({ queryKey: ['userMusics'] });
             setReturnToPlaylist(true)
           } catch (error: any) {
-            if(error.response.status === 404){
+            if(error?.response.status === 404){
               setError(
                 'musicUrl',
-                 {message: 'Ocorreu um erro, tente nnovamente mais tarde'})
+                 {message: 'Ocorreu um erro, tente novamente mais tarde'})
             }
           }
+          setIsLoading(false)
         }
        
        function handleKeyPress(event: React.KeyboardEvent<HTMLInputElement>){
@@ -75,6 +81,7 @@ export function AddMusic(){
                   onKeyDown={(event)=>{handleKeyPress(event)}}
                   />
                   {errors.musicUrl && <ErrorMessage>{errors.musicUrl.message}</ErrorMessage> }
+                  {isLoading && <LoadingMessage>Carregando...</LoadingMessage> }
                   </InputContainer>
            </SpaceToAddMusic>
          </Container>
