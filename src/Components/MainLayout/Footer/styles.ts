@@ -5,7 +5,6 @@ width: 100vw;
 border-top: 3px solid white;
 background-color: #343330;
 height: 7rem;
-position: absolute;
+position: fixed;
 bottom: 0;
-left: 0;
 `

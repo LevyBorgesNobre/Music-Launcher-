@@ -21,7 +21,6 @@ activeIndex: () => number
   
 export function TuneRepository({name, Img, id, playSongAtIndex, handleRepeatMusic, pauseMusic, playMusic, activeIndex, index} : TuneRepositoryData){
     const [isActive, setIsActive] = useState(false)
-    console.log(index)
     const queryClient = useQueryClient();
     async function deleteMusicFromUser(){
         try {
@@ -29,6 +28,7 @@ export function TuneRepository({name, Img, id, playSongAtIndex, handleRepeatMusi
                 data: { id },
             })
             queryClient.invalidateQueries({ queryKey: ['userMusics'] });
+            pauseMusic();
         } catch (error) {
             console.log(error)
         }
