@@ -2,6 +2,7 @@ import { MusicTrack } from "./MusicTrack"
 import { useQuery } from "@tanstack/react-query";
 import { api } from "../../lib/axios";
 import { EmptyPlaylist } from "./EmptyPlaylist";
+import { Music } from "../Home/MusicLibrary";
 
 export function PlayList(){
 

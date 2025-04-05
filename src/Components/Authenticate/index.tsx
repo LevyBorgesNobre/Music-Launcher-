@@ -95,11 +95,12 @@ export function Authenticate() {
         senha: ''
       });
 
-    } catch (error: any) {
-        if (error.response?.status === 400) {
-         const errorData = error.response.data;
+    } catch (error: unknown) {
+        if (error instanceof Error && (error as { response?: { status: number; data: { message: string } } }).response?.status === 400) {
+         type ErrorResponse = { response?: { status: number; data: { message: string } } };
+         const errorData = (error as ErrorResponse).response?.data;
         
-        if (errorData.message === "Já existe uma conta com esse e-mail. Faça login.") {
+        if (errorData?.message === "Já existe uma conta com esse e-mail. Faça login.") {
           setError("Email", {
             type: "manual",
             message: errorData.message,

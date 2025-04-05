@@ -1,13 +1,14 @@
-import { AddMusicButton, Container, InputContainer, InputFile, Label, LoadingMessage, PlusCircleButton, SpaceToAddMusic, Title } from "./styles";
-import { ArrowUpLeft, ArrowUUpLeft, PlusCircle, YoutubeLogo } from "phosphor-react";
+import {  Container, InputContainer, LoadingMessage, PlusCircleButton, SpaceToAddMusic, Title } from "./styles";
+import {  ArrowUUpLeft, YoutubeLogo } from "phosphor-react";
 import { Input } from "./styles";
 import { useState } from "react";
 import { MusicTrack } from "../MusicTrack";
 import { useQuery } from "@tanstack/react-query";
 import { PlaylistEmptyAlert } from "../EmptyPlaylist/PlaylistEmptyAlert";
 import { api } from "../../../lib/axios";
+import { Music } from "../../Home/MusicLibrary";
 import * as zod from "zod";
-import { set, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ErrorMessage } from "../../Authenticate/styles";
 import { useQueryClient } from '@tanstack/react-query';
@@ -47,8 +48,8 @@ export function AddMusic(){
             })
             queryClient.removeQueries({ queryKey: ['userMusics'] });
             setReturnToPlaylist(true)
-          } catch (error: any) {
-            if(error?.response.status === 404){
+          } catch (error: unknown) {
+            if (error instanceof Error && (error as import('axios').AxiosError)?.response?.status === 404) {
               setError(
                 'musicUrl',
                  {message: 'Ocorreu um erro, tente novamente mais tarde'})
