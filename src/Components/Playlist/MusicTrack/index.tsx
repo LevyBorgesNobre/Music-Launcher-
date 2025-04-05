@@ -21,17 +21,12 @@ export function MusicTrack(){
       }
     )
     const [isChecked, setIsChecked] = useState(false)
-
     const ReverseMusic = Musics.slice(0).reverse()
     const AmplitudePlaylist = ReverseMusic.map(music => ({
-      id: music.id,
-      title: music.title,
-      thumbnailUrl: music.thumbnailUrl,
-      url: music.cloudinaryUrl,
+        url: music.cloudinaryUrl,
     }))
-    console.log(AmplitudePlaylist[0].url)
     useEffect(() => {
-      if (!Amplitude.getSongs().length) {
+      if (ReverseMusic.length > 0) {
         Amplitude.init({
           songs: AmplitudePlaylist,
         });
@@ -50,7 +45,9 @@ export function MusicTrack(){
     const pauseMusic = ()=>{
       Amplitude.pause()
     }
-
+    const startPlaylist = () => {
+      Amplitude.playSongAtIndex(0)
+    }
     const activeIndex = () => {
        return Amplitude.getActiveIndex();
     }
@@ -70,27 +67,27 @@ export function MusicTrack(){
           }
         }, []);
 
-        const MusicIndex= Array.from({ length: Amplitude.getSongs().length }, (_, i) => i);
-        
-    return(
+      return(
         <>
         { isChecked === false? 
         <PlaylistContainer>
         <IconsContainer>
         <Icons>
+          <IconButtons onClick={()=> {
+               startPlaylist()
+            }}><PlayCircle size={40} color="#000000" weight="fill"/></IconButtons>
             <IconButtons onClick={()=>{setIsChecked(true)}}><PlusCircle size={40} color="#000000" weight="fill"/></IconButtons>
-            <IconButtons><PlayCircle size={40} color="#000000" weight="fill"/></IconButtons>
             <IconButtons><ShuffleAngular size={40} color="#000000" weight="fill"/></IconButtons>
         </Icons>
         </IconsContainer>
         <TuneContainer ref={listRef}>
-        {Amplitude.getSongs().map((music: Music, index: number) => {
+        {ReverseMusic.map((music: Music, index: number) => {
             return(
                 <TuneRepository
                 playSongAtIndex={() => {
                   Amplitude.playSongAtIndex(index)
                 }} 
-                index={MusicIndex.indexOf(index)}
+                index={index}
                 handleRepeatMusic={() => handleRepeat(index)}
                 playMusic={()=> playMusic()}
                 pauseMusic={() => pauseMusic()}
