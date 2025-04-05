@@ -29,7 +29,7 @@
     "@eslint/js": "^9.21.0",
     "@types/amplitude-js": "^8.16.5",
     "@types/howler": "^2.2.12",
-    "@types/react": "^19.0.10",
+    "@types/react": "^19.1.0",
     "@types/react-dom": "^19.0.4",
     "@types/sortablejs": "^1.15.8",
     "@vitejs/plugin-react": "^4.3.4",
