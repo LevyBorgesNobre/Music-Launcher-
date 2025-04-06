@@ -12,6 +12,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ErrorMessage } from "../../Authenticate/styles";
 import { useQueryClient } from '@tanstack/react-query';
+import Amplitude from "amplitudejs";
 
 export function AddMusic(){
        const queryClient = useQueryClient();
@@ -63,7 +64,8 @@ export function AddMusic(){
           handleSubmit(handleAddMusic)()
         }
        }
-
+           Amplitude.pause()
+       
     return(
          <>
          {returnToPlaylist === false ? 

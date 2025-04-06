@@ -14,14 +14,10 @@ export function Wrapper({children} : {children : ReactNode }){
     const location = useLocation();
 
   useEffect(() => {
-    const allowedRoutes = ["/Playlist"]; 
-
-    if (!allowedRoutes.includes(location.pathname)) {
-      if (Amplitude.getActiveSongMetadata()) {
-        Amplitude.pause(); 
-      }
-    }
+   if(location.pathname !== '/Playlist'){
+    Amplitude.pause()}
   }, [location]);
+
     return(
       <>
         <main>{children}</main>
