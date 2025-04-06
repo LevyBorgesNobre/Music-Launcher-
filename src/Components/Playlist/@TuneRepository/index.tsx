@@ -1,7 +1,7 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { api } from "../../../lib/axios";
 import { IconButtons, MainMusicTrack, MusicData, MusicTrackImage, MusicTrackName, ConfigButtons } from "./styles";
-import {  ShuffleAngular, Trash, Play, Pause } from "phosphor-react";
+import { Trash, Play, Pause, Repeat } from "phosphor-react";
 import { useState } from "react";
 
 
@@ -64,7 +64,7 @@ export function TuneRepository({name, Img, id, playSongAtIndex, handleRepeatMusi
            <Play size={25} color="#000000" weight="fill" />
            )}
             </IconButtons>
-                <IconButtons onClick={handleRepeatMusic}><ShuffleAngular size={25} color="#000000" weight="fill"/></IconButtons>
+                <IconButtons onClick={handleRepeatMusic}><Repeat size={28} color="#000000" weight="fill"/></IconButtons>
                 <IconButtons onClick={async() => {
                     await deleteMusicFromUser()
                 }}><Trash size={25} color="#000000" weight="fill"/></IconButtons>

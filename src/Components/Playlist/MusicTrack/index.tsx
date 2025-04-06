@@ -23,9 +23,7 @@ export function MusicTrack(){
     const [isChecked, setIsChecked] = useState(false)
     const ReverseMusic = Musics.slice(0).reverse()
     const [isPaused, setIsPaused] = useState(true)
-    
     const hasInitialized = useRef(false);
-
     useEffect(() => {
       if (!hasInitialized.current) {
         const AmplitudePlaylist = Musics.slice(0).reverse().map(music => ({
@@ -65,6 +63,12 @@ export function MusicTrack(){
     }
 
     const listRef = useRef(null);
+    
+    const randomMusics = Math.floor(Math.random() * Musics.length);
+    const handleRandomizeMusic = () => {
+        Amplitude.playSongAtIndex(randomMusics);      
+        console.log(randomMusics)
+    }
 
         useEffect(() => {
           if (listRef.current) {
@@ -105,7 +109,7 @@ export function MusicTrack(){
            </IconButtons>
           )}
             <IconButtons onClick={()=>{setIsChecked(true)}}><PlusCircle size={40} color="#000000" weight="fill"/></IconButtons>
-            <IconButtons><ShuffleAngular size={40} color="#000000" weight="fill"/></IconButtons>
+            <IconButtons onClick={()=>{handleRandomizeMusic()}}><ShuffleAngular size={40} color="#000000" weight="fill"/></IconButtons>
         </Icons>
         </IconsContainer>
         <TuneContainer ref={listRef}>

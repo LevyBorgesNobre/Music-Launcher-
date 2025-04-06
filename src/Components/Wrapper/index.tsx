@@ -1,5 +1,7 @@
 import { ReactNode, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
+import { useLocation } from "react-router-dom";
+import Amplitude from "amplitudejs"
 
 export function Wrapper({children} : {children : ReactNode }){
     const jwt = localStorage.getItem('jwt')
@@ -9,6 +11,17 @@ export function Wrapper({children} : {children : ReactNode }){
         navigate('/')
       }
     }, [jwt])
+    const location = useLocation();
+
+  useEffect(() => {
+    const allowedRoutes = ["/Playlist"]; 
+
+    if (!allowedRoutes.includes(location.pathname)) {
+      if (Amplitude.getActiveSongMetadata()) {
+        Amplitude.pause(); 
+      }
+    }
+  }, [location]);
     return(
       <>
         <main>{children}</main>
