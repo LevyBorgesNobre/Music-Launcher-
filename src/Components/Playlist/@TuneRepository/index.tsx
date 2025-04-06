@@ -15,13 +15,14 @@ interface TuneRepositoryData{
  pauseMusic:() => void
 activeIndex: () => number
  stopMusic: () => void
- index: number
+index: number
 }
   
   
 export function TuneRepository({name, Img, id, playSongAtIndex, handleRepeatMusic, pauseMusic, playMusic, activeIndex, index} : TuneRepositoryData){
-    const [isActive, setIsActive] = useState(false)
     const queryClient = useQueryClient();
+    const [isActive, setIsActive] = useState(false)
+
     async function deleteMusicFromUser(){
         try {
             await api.delete('/music', {

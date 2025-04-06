@@ -3,7 +3,7 @@ import { api } from "../../../lib/axios";
 import { TuneRepository } from "../@TuneRepository";
 import { IconsContainer, PlaylistContainer, TuneContainer } from "./styles";
 import { Icons, IconButtons } from "./styles";
-import { PlusCircle, PlayCircle, ShuffleAngular } from "phosphor-react";
+import { PlusCircle, PlayCircle, ShuffleAngular, PauseCircle} from "phosphor-react";
 import { Music } from "../../Home/MusicLibrary";
 import { useState } from "react";
 import { AddMusic } from "../AddMusic";
@@ -22,16 +22,26 @@ export function MusicTrack(){
     )
     const [isChecked, setIsChecked] = useState(false)
     const ReverseMusic = Musics.slice(0).reverse()
-    const AmplitudePlaylist = ReverseMusic.map(music => ({
-        url: music.cloudinaryUrl,
-    }))
+    const [isPaused, setIsPaused] = useState(true)
+    
+    const hasInitialized = useRef(false);
+
     useEffect(() => {
-      if (ReverseMusic.length > 0) {
+      if (!hasInitialized.current) {
+        const AmplitudePlaylist = Musics.slice(0).reverse().map(music => ({
+          id: music.id,
+          title: music.title,
+          thumbnailUrl: music.thumbnailUrl,
+          url: music.cloudinaryUrl,
+        }));
+    
         Amplitude.init({
           songs: AmplitudePlaylist,
         });
+    
+        hasInitialized.current = true;
       }
-    }, [AmplitudePlaylist]);
+    }, [Musics]);
 
     const handleRepeat = (index: number) => {
       Amplitude.playSongAtIndex(index)
@@ -45,9 +55,7 @@ export function MusicTrack(){
     const pauseMusic = ()=>{
       Amplitude.pause()
     }
-    const startPlaylist = () => {
-      Amplitude.playSongAtIndex(0)
-    }
+    
     const activeIndex = () => {
        return Amplitude.getActiveIndex();
     }
@@ -66,16 +74,36 @@ export function MusicTrack(){
             });
           }
         }, []);
-
-      return(
+        const hasStarted = useRef(false);
+         return(
         <>
         { isChecked === false? 
         <PlaylistContainer>
         <IconsContainer>
         <Icons>
-          <IconButtons onClick={()=> {
-               startPlaylist()
-            }}><PlayCircle size={40} color="#000000" weight="fill"/></IconButtons>
+         {isPaused ? (
+         <IconButtons
+            onClick={() => {
+            if (!hasStarted.current) {
+            Amplitude.playSongAtIndex(0); 
+            hasStarted.current = true;
+           } else {
+          Amplitude.play(); 
+          }
+        setIsPaused(false);
+        }}>
+        <PlayCircle size={40} color="#000000" weight="fill" />
+        </IconButtons>
+         ) : (
+         <IconButtons
+          onClick={() => {
+          Amplitude.pause();
+          setIsPaused(true);
+          }}
+          >
+           <PauseCircle size={40} color="#000000" weight="fill" />
+           </IconButtons>
+          )}
             <IconButtons onClick={()=>{setIsChecked(true)}}><PlusCircle size={40} color="#000000" weight="fill"/></IconButtons>
             <IconButtons><ShuffleAngular size={40} color="#000000" weight="fill"/></IconButtons>
         </Icons>
@@ -97,6 +125,7 @@ export function MusicTrack(){
                 key={music.id}
                 name={music.title}
                 Img={music.thumbnailUrl}
+              
                 />
             )
         })}
