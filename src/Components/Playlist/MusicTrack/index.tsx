@@ -36,7 +36,7 @@ export function MusicTrack(){
         Amplitude.init({
           songs: AmplitudePlaylist,
         });
-    
+        
         hasInitialized.current = true;
       }
     }, [Musics]);
@@ -61,6 +61,10 @@ export function MusicTrack(){
     const stopMusic = () =>{
       Amplitude.stop()
     }
+
+    const handlePlaySongAtIndex = (index: number) => {
+      Amplitude.playSongAtIndex(index);
+    };
 
     const listRef = useRef(null);
     
@@ -116,9 +120,7 @@ export function MusicTrack(){
         {ReverseMusic.map((music: Music, index: number) => {
             return(
                 <TuneRepository
-                playSongAtIndex={() => {
-                  Amplitude.playSongAtIndex(index)
-                }} 
+                 playSongAtIndex={() => handlePlaySongAtIndex(index)}
                 index={index}
                 handleRepeatMusic={() => handleRepeat(index)}
                 playMusic={()=> playMusic()}
@@ -129,11 +131,11 @@ export function MusicTrack(){
                 key={music.id}
                 name={music.title}
                 Img={music.thumbnailUrl}
-              
                 />
             )
         })}
         </TuneContainer>
+        
         </PlaylistContainer>
         : <AddMusic
         />}

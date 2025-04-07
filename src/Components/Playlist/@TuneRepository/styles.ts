@@ -47,3 +47,8 @@ display: flex;
 justify-content: center;
 gap: 1rem;
 `
+
+export const MusicDataContainer = styled.div`
+display: flex;
+justify-content: space-between;
+`
