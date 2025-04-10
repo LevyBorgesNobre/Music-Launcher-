@@ -1,9 +1,15 @@
 import { api } from "../../../lib/axios";
-import { IconButtons, MainMusicTrack, MusicData, MusicTrackImage, MusicTrackName, ConfigButtons } from "./styles";
+import {
+  IconButtons,
+  MainMusicTrack,
+  MusicData,
+  MusicTrackImage,
+  MusicTrackName,
+  ConfigButtons,
+} from "./styles";
 import { Trash, Play, Pause, Repeat } from "phosphor-react";
-import { useEffect, useState } from "react";
-import { ProgressBar } from "./ProgressBar";
 import { useQueryClient } from "@tanstack/react-query";
+import { ProgressBar } from "./ProgressBar";
 
 interface TuneRepositoryData {
   name: string;
@@ -13,9 +19,10 @@ interface TuneRepositoryData {
   handleRepeatMusic: () => void;
   playMusic: () => void;
   pauseMusic: () => void;
-  activeIndex: () => number;
   stopMusic: () => void;
+  activeIndex: number | null;
   index: number;
+  isPlaying: boolean;
 }
 
 export function TuneRepository({
@@ -28,10 +35,10 @@ export function TuneRepository({
   playMusic,
   activeIndex,
   index,
+  isPlaying,
 }: TuneRepositoryData) {
   const queryClient = useQueryClient();
-  const [isActive, setIsActive] = useState(false);
-
+  const isActive = activeIndex === index;
 
   async function deleteMusicFromUser() {
     try {
@@ -45,44 +52,36 @@ export function TuneRepository({
     }
   }
 
-  useEffect(() => {
-    setIsActive(activeIndex() === index);
-  }, [activeIndex, index]);
-
   return (
     <MainMusicTrack>
-    <MusicData>
+      <MusicData>
         <MusicTrackImage src={Img} alt="Imagem da capa da musica" />
         <MusicTrackName>{name}</MusicTrackName>
       </MusicData>
-      <ProgressBar index={index}/>
-      
+
+      <ProgressBar index={index} />
+
       <ConfigButtons>
         <IconButtons
           onClick={() => {
-            const currentIndex = activeIndex();
             if (isActive) {
-              pauseMusic();
-              setIsActive(false);
+              void (isPlaying ? pauseMusic() : playMusic());
             } else {
-              if (currentIndex === index) {
-                playMusic();
-              } else {
-                playSongAtIndex(index);
-              }
-              setIsActive(true);
+              playSongAtIndex(index);
             }
           }}
         >
-          {isActive ? (
+          {isActive && isPlaying ? (
             <Pause size={25} color="#000000" weight="fill" />
           ) : (
             <Play size={25} color="#000000" weight="fill" />
           )}
         </IconButtons>
+
         <IconButtons onClick={handleRepeatMusic}>
           <Repeat size={28} color="#000000" weight="fill" />
         </IconButtons>
+
         <IconButtons onClick={async () => await deleteMusicFromUser()}>
           <Trash size={25} color="#000000" weight="fill" />
         </IconButtons>

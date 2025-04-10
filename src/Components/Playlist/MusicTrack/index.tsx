@@ -1,144 +1,150 @@
 import { useQuery } from "@tanstack/react-query";
 import { api } from "../../../lib/axios";
 import { TuneRepository } from "../@TuneRepository";
-import { IconsContainer, PlaylistContainer, TuneContainer } from "./styles";
-import { Icons, IconButtons } from "./styles";
-import { PlusCircle, PlayCircle, ShuffleAngular, PauseCircle} from "phosphor-react";
+import {
+  IconsContainer,
+  PlaylistContainer,
+  TuneContainer,
+  Icons,
+  IconButtons,
+} from "./styles";
+import {
+  PlusCircle,
+  PlayCircle,
+  ShuffleAngular,
+  PauseCircle,
+} from "phosphor-react";
 import { Music } from "../../Home/MusicLibrary";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { AddMusic } from "../AddMusic";
 import Sortable from "sortablejs";
-import { useRef, useEffect } from "react";    
 import Amplitude from "amplitudejs";
+import { SoundControll } from "./SoundControl";
 
-export function MusicTrack(){
-    const { data: Musics = [] } = useQuery<Music[]>({
-        queryKey: ['userMusics'],
-        queryFn: async () => {
-          const response = await api.get(`/users`)
-          return response.data.Music
-        },
-      }
-    )
-    const [isChecked, setIsChecked] = useState(false)
-    const ReverseMusic = Musics.slice(0).reverse()
-    const [isPaused, setIsPaused] = useState(true)
-    const hasInitialized = useRef(false);
-    useEffect(() => {
-      if (!hasInitialized.current) {
-        const AmplitudePlaylist = Musics.slice(0).reverse().map(music => ({
-          id: music.id,
-          title: music.title,
-          thumbnailUrl: music.thumbnailUrl,
-          url: music.cloudinaryUrl,
-        }));
-    
-        Amplitude.init({
-          songs: AmplitudePlaylist,
-        });
-        
-        hasInitialized.current = true;
-      }
-    }, [Musics]);
+export function MusicTrack() {
+  const { data: Musics = [] } = useQuery<Music[]>({
+    queryKey: ["userMusics"],
+    queryFn: async () => {
+      const response = await api.get(`/users`);
+      return response.data.Music;
+    },
+  });
 
-    const handleRepeat = (index: number) => {
-      Amplitude.playSongAtIndex(index)
-      Amplitude.setRepeat(true)
-    };
-    
-    const playMusic = () =>{
-      Amplitude.play()
+  const ReverseMusic = Musics.slice(0).reverse();
+  const [isChecked, setIsChecked] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [activeMusicIndex, setActiveMusicIndex] = useState<number | null>(null);
+  const hasInitialized = useRef(false);
+  const hasStarted = useRef(false);
+  const listRef = useRef(null);
+  useEffect(() => {
+    if (!hasInitialized.current) {
+      const AmplitudePlaylist = ReverseMusic.map((music) => ({
+        id: music.id,
+        title: music.title,
+        thumbnailUrl: music.thumbnailUrl,
+        url: music.cloudinaryUrl,
+      }));
+
+      Amplitude.init({ songs: AmplitudePlaylist });
+      hasInitialized.current = true;
     }
+  }, [Musics]);
 
-    const pauseMusic = ()=>{
-      Amplitude.pause()
-    }
-    
-    const activeIndex = () => {
-       return Amplitude.getActiveIndex();
-    }
-    
-    const stopMusic = () =>{
-      Amplitude.stop()
-    }
+  const handlePlaySongAtIndex = (index: number) => {
+    Amplitude.playSongAtIndex(index);
+    setActiveMusicIndex(index);
+    setIsPlaying(true);
+  };
 
-    const handlePlaySongAtIndex = (index: number) => {
-      Amplitude.playSongAtIndex(index);
-    };
+  const playMusic = () => {
+    Amplitude.play();
+    setIsPlaying(true);
+  };
 
-    const listRef = useRef(null);
-    
-    const randomMusics = Math.floor(Math.random() * Musics.length);
-    const handleRandomizeMusic = () => {
-        Amplitude.playSongAtIndex(randomMusics);      
-        console.log(randomMusics)
+  const pauseMusic = () => {
+    Amplitude.pause();
+    setIsPlaying(false);
+  };
+
+  const stopMusic = () => {
+    Amplitude.stop();
+    setIsPlaying(false);
+  };
+
+  const handleRepeat = (index: number) => {
+    Amplitude.playSongAtIndex(index);
+    Amplitude.setRepeat(true);
+    setActiveMusicIndex(index);
+    setIsPlaying(true);
+  };
+
+  const handleRandomizeMusic = () => {
+    const randomIndex = Math.floor(Math.random() * Musics.length);
+    handlePlaySongAtIndex(randomIndex);
+  };
+
+  useEffect(() => {
+    if (listRef.current) {
+      new Sortable(listRef.current, {
+        animation: 150,
+        ghostClass: "ghost",
+      });
     }
+  }, []);
 
-        useEffect(() => {
-          if (listRef.current) {
-            new Sortable(listRef.current, {
-              animation: 150,
-              ghostClass: "ghost",
-            });
-          }
-        }, []);
-        const hasStarted = useRef(false);
-         return(
-        <>
-        { isChecked === false? 
-        <PlaylistContainer>
-        <IconsContainer>
+  return isChecked ? (
+    <AddMusic />
+  ) : (
+    <PlaylistContainer >
+          <IconsContainer>
+            <SoundControll/>
         <Icons>
-         {isPaused ? (
-         <IconButtons
+          <IconButtons
             onClick={() => {
-            if (!hasStarted.current) {
-            Amplitude.playSongAtIndex(0); 
-            hasStarted.current = true;
-           } else {
-          Amplitude.play(); 
-          }
-        setIsPaused(false);
-        }}>
-        <PlayCircle size={40} color="#000000" weight="fill" />
-        </IconButtons>
-         ) : (
-         <IconButtons
-          onClick={() => {
-          Amplitude.pause();
-          setIsPaused(true);
-          }}
+              if (!hasStarted.current) {
+                handlePlaySongAtIndex(0);
+                hasStarted.current = true;
+              } else {
+                void (isPlaying ? pauseMusic() : playMusic());
+              }
+            }}
           >
-           <PauseCircle size={40} color="#000000" weight="fill" />
-           </IconButtons>
-          )}
-            <IconButtons onClick={()=>{setIsChecked(true)}}><PlusCircle size={40} color="#000000" weight="fill"/></IconButtons>
-            <IconButtons onClick={()=>{handleRandomizeMusic()}}><ShuffleAngular size={40} color="#000000" weight="fill"/></IconButtons>
+            {isPlaying ? (
+              <PauseCircle size={40} color="#000000" weight="fill" />
+            ) : (
+              <PlayCircle size={40} color="#000000" weight="fill" />
+            )}
+          </IconButtons>
+
+          <IconButtons onClick={() => setIsChecked(true)}>
+            <PlusCircle size={40} color="#000000" weight="fill" />
+          </IconButtons>
+
+          <IconButtons onClick={handleRandomizeMusic}>
+            <ShuffleAngular size={40} color="#000000" weight="fill" />
+          </IconButtons>
         </Icons>
-        </IconsContainer>
-        <TuneContainer ref={listRef}>
-        {ReverseMusic.map((music: Music, index: number) => {
-            return(
-                <TuneRepository
-                 playSongAtIndex={() => handlePlaySongAtIndex(index)}
-                index={index}
-                handleRepeatMusic={() => handleRepeat(index)}
-                playMusic={()=> playMusic()}
-                pauseMusic={() => pauseMusic()}
-                activeIndex={() => activeIndex()}
-                stopMusic={() => stopMusic()}
-                id={music.id}
-                key={music.id}
-                name={music.title}
-                Img={music.thumbnailUrl}
-                />
-            )
-        })}
-        </TuneContainer>
-        
-        </PlaylistContainer>
-        : <AddMusic
-        />}
-        </>
-    )
+      </IconsContainer>
+
+      <TuneContainer ref={listRef}>
+        {ReverseMusic.map((music: Music, index: number) => (
+          <TuneRepository
+            key={music.id}
+            id={music.id}
+            index={index}
+            name={music.title}
+            Img={music.thumbnailUrl}
+            playSongAtIndex={() => handlePlaySongAtIndex(index)}
+            playMusic={playMusic}
+            pauseMusic={pauseMusic}
+            stopMusic={stopMusic}
+            handleRepeatMusic={() => handleRepeat(index)}
+            activeIndex={activeMusicIndex}
+            isPlaying={isPlaying}
+          />
+        ))}
+      </TuneContainer>
+    </PlaylistContainer>
+  );
 }
