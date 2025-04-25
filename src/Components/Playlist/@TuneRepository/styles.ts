@@ -8,7 +8,7 @@ border: transparent;
 export const MainMusicTrack = styled.div`
 height: 5rem;
 width:90vw;
-background-color: #595857;
+background: linear-gradient(to left, #0d0d0d, #666666);
 border-radius:5px;
 display: flex;
 justify-content: space-between;
@@ -52,3 +52,4 @@ export const MusicDataContainer = styled.div`
 display: flex;
 justify-content: space-between;
 `
+

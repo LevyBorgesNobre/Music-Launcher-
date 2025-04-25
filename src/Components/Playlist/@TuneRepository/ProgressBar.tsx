@@ -64,7 +64,7 @@ export function ProgressBar({ index }: ProgressBarProps) {
             background: `linear-gradient(to right, gray ${progress}%, black ${progress}%)`,
           }}
       />
-      <Time>{formatTime(duration)}</Time>
+      <Time ><span>{formatTime(duration)}</span></Time>
     </ProgressContainer>
   );
 }

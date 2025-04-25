@@ -20,6 +20,8 @@ import { AddMusic } from "../AddMusic";
 import Sortable from "sortablejs";
 import Amplitude from "amplitudejs";
 import { SoundControll } from "./SoundControl";
+import { MusicContext } from "../../../Contexts/MusicContext";
+import { useContext } from "react";
 
 export function MusicTrack() {
   const { data: Musics = [] } = useQuery<Music[]>({
@@ -30,15 +32,46 @@ export function MusicTrack() {
     },
   });
 
+  const { setStartSong, loop, setLoop } = useContext(MusicContext);
   const ReverseMusic = Musics.slice(0).reverse();
   const [isChecked, setIsChecked] = useState(false);
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [startFirstSong, setStartFirstSong] = useState(false);
   const [activeMusicIndex, setActiveMusicIndex] = useState<number | null>(null);
+  const startLoop = useRef(false)
+  const startLoopRef = useRef(loop)
   const hasInitialized = useRef(false);
-  const hasStarted = useRef(false);
   const listRef = useRef(null);
+  
+ function changedMusicSymbol(){
+  setStartFirstSong(false)
+  setStartSong(false)
+  setLoop(false)
+  Amplitude.setSongPlayedPercentage(0);
+  }
+
+   useEffect(()=>{
+   startLoopRef.current = loop
+   },[loop])
+
+   function handleLoopMusic(){
+      const currentTime = Amplitude.getSongPlayedSeconds();
+      const duration = Amplitude.getSongDuration();
+  
+      const remaining = duration - currentTime;
+      const time = remaining < 2 && remaining > 1.5 
+  
+      if (time && startLoopRef.current && !startLoop.current) {
+        console.log('A música está quase no fim!');
+        Amplitude.playSongAtIndex(Amplitude.getActiveIndex())
+      }
+   }
+
+   function handleCapturePlayMusic(){
+    console.log("Capture initial event ")
+   }
+
   useEffect(() => {
-    if (!hasInitialized.current) {
+    if (Musics.length) {
       const AmplitudePlaylist = ReverseMusic.map((music) => ({
         id: music.id,
         title: music.title,
@@ -46,42 +79,65 @@ export function MusicTrack() {
         url: music.cloudinaryUrl,
       }));
 
-      Amplitude.init({ songs: AmplitudePlaylist });
+      Amplitude.init({ 
+        songs: AmplitudePlaylist ,
+        continue_next: true,
+        callbacks: {
+          ended: () =>{
+            changedMusicSymbol();
+          },
+          song_change: () =>{
+           changedMusicSymbol()
+          },
+          play: () => {
+            handleCapturePlayMusic()
+          },
+          timeupdate: () => {
+              handleLoopMusic()
+          }
+        },
+       
+      });
       hasInitialized.current = true;
     }
   }, [Musics]);
-
-  const handlePlaySongAtIndex = (index: number) => {
+   
+  const handlePlaySongAtIndexZero = (index: number) => {
     Amplitude.playSongAtIndex(index);
     setActiveMusicIndex(index);
-    setIsPlaying(true);
+    setStartFirstSong(true);
+  };
+  
+  const handleStartMusicWithIndex = (index: number) =>{
+    Amplitude.playSongAtIndex(index);
+    setActiveMusicIndex(index);
+  }
+
+  const playMusicAtIndexZero = () => {
+      Amplitude.play();
+      setStartFirstSong(true);
   };
 
+  const pauseMusicAtIndexZero = () => {
+      Amplitude.pause();
+      setStartFirstSong(false)
+  };
+  
   const playMusic = () => {
-    Amplitude.play();
-    setIsPlaying(true);
-  };
-
+   Amplitude.play() 
+  }
+   
   const pauseMusic = () => {
-    Amplitude.pause();
-    setIsPlaying(false);
-  };
+    Amplitude.pause()
+  }
 
-  const stopMusic = () => {
-    Amplitude.stop();
-    setIsPlaying(false);
-  };
-
-  const handleRepeat = (index: number) => {
-    Amplitude.playSongAtIndex(index);
-    Amplitude.setRepeat(true);
-    setActiveMusicIndex(index);
-    setIsPlaying(true);
+  const handleRepeat = () => {
+    setLoop(true);
   };
 
   const handleRandomizeMusic = () => {
     const randomIndex = Math.floor(Math.random() * Musics.length);
-    handlePlaySongAtIndex(randomIndex);
+    handlePlaySongAtIndexZero(randomIndex);
   };
 
   useEffect(() => {
@@ -93,36 +149,75 @@ export function MusicTrack() {
     }
   }, []);
 
+
   return isChecked ? (
     <AddMusic />
-  ) : (
+   ) : (
     <PlaylistContainer >
           <IconsContainer>
             <SoundControll/>
         <Icons>
-          <IconButtons
-            onClick={() => {
-              if (!hasStarted.current) {
-                handlePlaySongAtIndex(0);
-                hasStarted.current = true;
-              } else {
-                void (isPlaying ? pauseMusic() : playMusic());
-              }
-            }}
-          >
-            {isPlaying ? (
-              <PauseCircle size={40} color="#000000" weight="fill" />
-            ) : (
-              <PlayCircle size={40} color="#000000" weight="fill" />
-            )}
-          </IconButtons>
-
+        {
+     (startFirstSong ? 
+     <IconButtons
+      onClick={() => {
+          pauseMusicAtIndexZero();
+          console.log("Pause song")
+      }}
+      >
+      <PauseCircle 
+      size={40} color="#0d0d0d" weight="fill" 
+      style={{
+        transition: 'transform 0.1s ease, color 0.1s ease',
+      }}
+      onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.2)'}
+      onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
+      />
+      </IconButtons>
+     : 
+     <IconButtons
+      onClick={() => {
+        const activeIndex = Amplitude.getActiveIndex();
+        console.log("Play song")
+        if (activeIndex === 0) {
+          playMusicAtIndexZero();
+        } else {
+          Amplitude.playSongAtIndex(0);
+        }
+        setStartFirstSong(true);
+      }}
+      >
+      <PlayCircle 
+      size={40} color="#0d0d0d" weight="fill" 
+      style={{
+        transition: 'transform 0.1s ease, color 0.1s ease',
+      }}
+      onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.2)'}
+      onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
+      />
+     </IconButtons>)
+      }
+          
           <IconButtons onClick={() => setIsChecked(true)}>
-            <PlusCircle size={40} color="#000000" weight="fill" />
+            <PlusCircle 
+            size={40} color="#0d0d0d" weight="fill" 
+            style={{
+              transition: 'transform 0.1s ease, color 0.1s ease',
+            }}
+            onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.2)'}
+            onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
+            />
           </IconButtons>
-
+           
           <IconButtons onClick={handleRandomizeMusic}>
-            <ShuffleAngular size={40} color="#000000" weight="fill" />
+            <ShuffleAngular 
+            size={40} color="#0d0d0d" weight="fill" 
+            style={{
+              transition: 'transform 0.1s ease, color 0.1s ease',
+            }}
+            onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.2)'}
+            onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
+            />
           </IconButtons>
         </Icons>
       </IconsContainer>
@@ -135,13 +230,15 @@ export function MusicTrack() {
             index={index}
             name={music.title}
             Img={music.thumbnailUrl}
-            playSongAtIndex={() => handlePlaySongAtIndex(index)}
+            playSongAtIndex={() => handlePlaySongAtIndexZero(index)}
+            handleStartMusicWithIndex={() => handleStartMusicWithIndex(index)}
+            startFirstSong={startFirstSong}
+            playMusicAtIndex={playMusicAtIndexZero}
+            pauseMusicAtIndex={pauseMusicAtIndexZero}
             playMusic={playMusic}
             pauseMusic={pauseMusic}
-            stopMusic={stopMusic}
-            handleRepeatMusic={() => handleRepeat(index)}
+            handleRepeatMusic={() => handleRepeat()}
             activeIndex={activeMusicIndex}
-            isPlaying={isPlaying}
           />
         ))}
       </TuneContainer>

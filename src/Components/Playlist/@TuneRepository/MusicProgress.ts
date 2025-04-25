@@ -58,4 +58,7 @@ export const Time = styled.span`
   color: black;
   white-space: nowrap;
   font-family: "Baloo 2", serif;
+  span{
+    color: #666666;
+  }
 `;

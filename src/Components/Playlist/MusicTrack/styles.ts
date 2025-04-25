@@ -40,3 +40,8 @@ border: transparent;
 export const ProgressBarContainer = styled.div`
 margin-top:0.4rem;
 ` 
+
+export const VolumeControllButton = styled.button`
+background: transparent;
+border: transparent;
+`

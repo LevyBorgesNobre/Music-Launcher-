@@ -54,6 +54,10 @@ export function AddMusic(){
               setError(
                 'musicUrl',
                  {message: 'Ocorreu um erro, tente novamente mais tarde'})
+            }else{
+              setError('musicUrl',
+                {message: 'Ocorreu um erro, tente novamente mais tarde'}
+              )
             }
           }
           setIsLoading(false)
