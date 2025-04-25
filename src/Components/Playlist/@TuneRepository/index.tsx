@@ -11,7 +11,7 @@ import {
 import { Trash, Play, Pause, Repeat,  RepeatOnce } from "phosphor-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { ProgressBar } from "./ProgressBar";
-import React, { useContext,  useState } from "react";
+import  { useContext,  useState } from "react";
 import { MusicContext } from "../../../Contexts/MusicContext";
 
 interface TuneRepositoryData {
