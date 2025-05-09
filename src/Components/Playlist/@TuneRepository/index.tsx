@@ -11,10 +11,8 @@ import {
 import { Trash, Play, Pause, Repeat,  RepeatOnce } from "phosphor-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { ProgressBar } from "./ProgressBar";
-import  { useContext,  useEffect,  useRef,  useState } from "react";
+import  { useContext,  useState } from "react";
 import { MusicContext } from "../../../Contexts/MusicContext";
-import Amplitude from "amplitudejs";
-import { start } from "repl";
 
 interface TuneRepositoryData {
   name: string;
@@ -39,7 +37,6 @@ export function TuneRepository({
   handleRepeatMusic,
   pauseMusic,
   playMusic,
-  playMusicAtIndex,
   activeIndex,
   index,
   handleStartMusicWithIndex,
