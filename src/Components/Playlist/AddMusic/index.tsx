@@ -1,6 +1,5 @@
-import {  Container, InputContainer, LoadingMessage, PlusCircleButton, SpaceToAddMusic, Title } from "./styles";
-import {  ArrowUUpLeft, YoutubeLogo } from "phosphor-react";
-import { Input } from "./styles";
+import {  Container, InputContainer, InputFile, Label, LoadingMessage, PlusCircleButton, SpaceToAddMusic, Title } from "./styles";
+import {  ArrowUUpLeft, MusicNotes} from "phosphor-react";
 import { useState } from "react";
 import { MusicTrack } from "../MusicTrack";
 import { useQuery } from "@tanstack/react-query";
@@ -15,6 +14,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import Amplitude from "amplitudejs";
 
 export function AddMusic(){
+
        const queryClient = useQueryClient();
        const { data: Musics = [] } = useQuery<Music[]>({
               queryKey: ['userMusics'],
@@ -24,12 +24,12 @@ export function AddMusic(){
               },
             }
           )
+
       const [returnToPlaylist, setReturnToPlaylist] = useState(false)
       const [isLoading, setIsLoading] = useState(false)
 
       const addMusicFormConfig = zod.object({
         musicUrl : zod.string()
-        .nonempty({message: 'Campo obrigatório'})
         .url({message: 'Link inválido'})
       })
 
@@ -77,16 +77,18 @@ export function AddMusic(){
            <PlusCircleButton onClick={()=>{setReturnToPlaylist(true)}}><ArrowUUpLeft size={40} color="#000000" weight="fill"/></PlusCircleButton>
            <SpaceToAddMusic>
                  <Title>
-                  Adicione através do Youtube
-                  <YoutubeLogo size={40} color="#000000" weight="fill"/>
+                  Adicione através de um aqruivo mp3
+                  <MusicNotes size={40} color="#000000" weight="fill"/>
                  </Title>
                   <InputContainer>
-                  <Input 
-                  type="text"
-                  placeholder="Link aqui"
+                  <Label>
+                    <p>Enviar arquivo mp3</p>
+                  <InputFile 
+                  type="file"
                   {...register('musicUrl')}
                   onKeyDown={(event)=>{handleKeyPress(event)}}
                   />
+                  </Label>
                   {errors.musicUrl && <ErrorMessage>{errors.musicUrl.message}</ErrorMessage> }
                   {isLoading && <LoadingMessage>Carregando...</LoadingMessage> }
                   </InputContainer>

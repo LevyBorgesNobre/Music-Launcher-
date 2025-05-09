@@ -26,29 +26,31 @@ export const SpaceToAddMusic = styled.div`
 
 export const Title = styled.p`
  height: 2.5rem;
- width: 24rem;
- font-size: 1.7rem;
+ width: 27rem;
+ font-size: 1.5rem;
  font-family: "Baloo 2", serif;
  color: ${props=> props.theme['white']};
  display: flex;
  gap: 0.5rem;
 `;
 
-export const Input  = styled.input`
+export const Label  = styled.label`
  height: 2.9rem;
- width: 22rem;
+ width: 24rem;
  background-color: ${props=> props.theme['white']};
+ color: black;
  border-radius:10px;
  padding-left:0.7rem;
  border: transparent;
  display: flex;
-
- &::placeholder{
-    font-family: "Baloo 2", serif;
-    font-size: 1rem;
-    color: ${props=> props.theme['text-default']};
+ font-family: "Baloo 2", serif;
+ p{
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+    font-size: 1.1rem;
  }
-`;
+`
 
 export const InputContainer = styled.div`
  height:3rem ;
@@ -57,8 +59,8 @@ export const InputContainer = styled.div`
 `;
 
 export const InputFile = styled.input`
- height: 1rem;
- width: 10rem;
+ height: 2.9rem;
+ width: 22rem;
  border: transparent;
  background-color: ${props=> props.theme['white']};
  opacity: 0;
@@ -68,7 +70,6 @@ export const LoadingMessage = styled.p`
  font-family: "Baloo 2", serif;
  font-style: normal;
  font-size:1.5rem;
- color:red;
  color: orange
  `
 

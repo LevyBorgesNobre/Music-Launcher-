@@ -21,7 +21,7 @@ export function SoundControll() {
   
   return (
     <Div>
-        {isMuted?
+        {isMuted ?
         <VolumeControllButton
         onClick={()=>{
           setIsMuted(!isMuted);

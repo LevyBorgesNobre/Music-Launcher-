@@ -32,21 +32,22 @@ export function MusicTrack() {
     },
   });
 
-  const { setStartSong, loop, setLoop } = useContext(MusicContext);
+  const { setStartSong, loop, setLoop, startFirstSong, setStartFirstSong } = useContext(MusicContext);
   const ReverseMusic = Musics.slice(0).reverse();
   const [isChecked, setIsChecked] = useState(false);
-  const [startFirstSong, setStartFirstSong] = useState(false);
   const [activeMusicIndex, setActiveMusicIndex] = useState<number | null>(null);
   const startLoop = useRef(false)
   const startLoopRef = useRef(loop)
   const hasInitialized = useRef(false);
   const listRef = useRef(null);
-  
+  const indexZero = Amplitude.getActiveIndex()
+
  function changedMusicSymbol(){
-  setStartFirstSong(false)
-  setStartSong(false)
-  setLoop(false)
-  Amplitude.setSongPlayedPercentage(0);
+  if(indexZero === indexZero || indexZero !== 0){
+    setStartSong(false)
+    setStartFirstSong(false)
+    console.log("teste de index")
+  }
   }
 
    useEffect(()=>{
@@ -114,7 +115,7 @@ export function MusicTrack() {
   }
 
   const playMusicAtIndexZero = () => {
-      Amplitude.play();
+        Amplitude.play();
       setStartFirstSong(true);
   };
 
@@ -157,12 +158,13 @@ export function MusicTrack() {
           <IconsContainer>
             <SoundControll/>
         <Icons>
-        {
+        { 
      (startFirstSong ? 
      <IconButtons
       onClick={() => {
-          pauseMusicAtIndexZero();
+          pauseMusic();
           console.log("Pause song")
+          setStartFirstSong(false)
       }}
       >
       <PauseCircle 
@@ -178,12 +180,13 @@ export function MusicTrack() {
      <IconButtons
       onClick={() => {
         const activeIndex = Amplitude.getActiveIndex();
-        console.log("Play song")
-        if (activeIndex === 0) {
-          playMusicAtIndexZero();
+        console.log("header button : Start song whith index zero")
+        if (activeIndex ===  0) {
+          playMusic();
         } else {
           Amplitude.playSongAtIndex(0);
         }
+        console.log(Amplitude.getActiveIndex())
         setStartFirstSong(true);
       }}
       >
@@ -232,7 +235,6 @@ export function MusicTrack() {
             Img={music.thumbnailUrl}
             playSongAtIndex={() => handlePlaySongAtIndexZero(index)}
             handleStartMusicWithIndex={() => handleStartMusicWithIndex(index)}
-            startFirstSong={startFirstSong}
             playMusicAtIndex={playMusicAtIndexZero}
             pauseMusicAtIndex={pauseMusicAtIndexZero}
             playMusic={playMusic}

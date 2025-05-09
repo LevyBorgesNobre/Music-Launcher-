@@ -11,8 +11,10 @@ import {
 import { Trash, Play, Pause, Repeat,  RepeatOnce } from "phosphor-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { ProgressBar } from "./ProgressBar";
-import  { useContext,  useState } from "react";
+import  { useContext,  useEffect,  useRef,  useState } from "react";
 import { MusicContext } from "../../../Contexts/MusicContext";
+import Amplitude from "amplitudejs";
+import { start } from "repl";
 
 interface TuneRepositoryData {
   name: string;
@@ -27,7 +29,6 @@ interface TuneRepositoryData {
   pauseMusic: () => void;
   activeIndex: number | null;
   index: number;
-  startFirstSong: boolean,
 }
 
 export function TuneRepository({
@@ -38,18 +39,16 @@ export function TuneRepository({
   handleRepeatMusic,
   pauseMusic,
   playMusic,
-  pauseMusicAtIndex,
   playMusicAtIndex,
   activeIndex,
   index,
-  startFirstSong,
   handleStartMusicWithIndex,
 }: TuneRepositoryData) {
   const queryClient = useQueryClient();
   const isActive = activeIndex === index;
-  const {startSong, setStartSong, setLoop, loop } = useContext(MusicContext)
+  const {startSong, setStartSong, setLoop, startFirstSong, setStartFirstSong } = useContext(MusicContext)
   const [loopControl, setLoopControl] = useState(false)
-  
+
   async function deleteMusicFromUser() {
     try {
       await api.delete("/music", {
@@ -62,6 +61,10 @@ export function TuneRepository({
       console.log(error);
     } 
   }
+   
+   if(startFirstSong === true && index ===0 ){
+    console.log("teste do ref")
+   }
 
   return (
     <MainMusicTrack>
@@ -73,12 +76,13 @@ export function TuneRepository({
       index={index} 
       />
       <ConfigButtons>
-        {index === 0?
+        {index === 0 ?
      ( startFirstSong ? 
        <IconButtons
         onClick={() => {
           console.log("Pause song whith index zero ")
-        pauseMusicAtIndex();       
+        pauseMusic()
+        setStartFirstSong(false)
       }}
      >
       <Pause 
@@ -95,11 +99,12 @@ export function TuneRepository({
     onClick={() => { 
       console.log("Start song whith index zero")
       if (isActive) {
-        playMusicAtIndex();
+        playMusic();
       } 
       else {
       playSongAtIndex(0);
       }
+      setStartFirstSong(true)
     }}
    >
     <Play 
@@ -112,12 +117,13 @@ export function TuneRepository({
     />
   </IconButtons>
 )
-  :
-  (startSong && isActive?
+  : 
+  (startSong && isActive ?
    <IconButtons
    onClick={() => {
    pauseMusic(); 
    setStartSong(false)
+   console.log("pause do startSong ")
   }}
   >
   <Pause 
@@ -132,6 +138,8 @@ export function TuneRepository({
   :
      <IconButtons
      onClick={() => {
+      console.log("start music with non-zero index")
+      console.log(index)
       if (isActive) {
       playMusic();
       } else {
@@ -171,7 +179,6 @@ export function TuneRepository({
      <IconButtons onClick={()=> {
       setLoop(false)
       setLoopControl(false)
-      console.log("loopControl desativado", loop)
      }}>
      <RepeatOnce 
      size={28} color="#4d4d4d" weight="fill"
