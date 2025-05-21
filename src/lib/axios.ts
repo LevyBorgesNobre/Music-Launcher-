@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const api  = axios.create({
-    baseURL:'https://mlauncherapi-production.up.railway.app/'
+    baseURL:'https://musiclauncherapi.onrender.com/'
 })
 
 api.interceptors.request.use((config)=> {
