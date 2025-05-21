@@ -34,28 +34,14 @@ export const Title = styled.p`
  gap: 0.5rem;
 `;
 
-export const Label  = styled.label`
- height: 2.9rem;
- width: 24rem;
- background-color: ${props=> props.theme['white']};
- color: black;
- border-radius:10px;
- padding-left:0.7rem;
- border: transparent;
- display: flex;
- font-family: "Baloo 2", serif;
- p{
-    display: flex;
-    align-items: center;
-    white-space: nowrap;
-    font-size: 1.1rem;
- }
-`
-
 export const InputContainer = styled.div`
  height:3rem ;
  flex-direction: column;
- gap: 0.2rem;
+
+ form{
+   display: flex;
+   gap: 5px;
+ };
 `;
 
 export const InputFile = styled.input`
@@ -63,15 +49,36 @@ export const InputFile = styled.input`
  width: 22rem;
  border: transparent;
  background-color: ${props=> props.theme['white']};
- opacity: 0;
+ opacity: 1;
+ border-radius:10px;
+ padding-left:1rem;
 `;
 
+export const SendSongButton = styled.button`
+ width:5rem;
+ height: 2.9rem;
+ border-radius:10px;
+ background-color: orange;
+ outline: 0;
+ border: transparent;
+ `
 export const LoadingMessage = styled.p`
  font-family: "Baloo 2", serif;
  font-style: normal;
  font-size:1.5rem;
  color: orange
  `
+export const ButtonSendSong = styled.button`
+ height: 2.9rem;
+ width: 24rem;
+ display: flex;
+ align-items: center;
+ padding-left:0.7rem;
+ margin-top:1rem;
+ border-radius:10px;
+  font-family: "Baloo 2", serif;
+  background-color:#FFA500;
+  font-size:1.1rem;
 
-
+`
  

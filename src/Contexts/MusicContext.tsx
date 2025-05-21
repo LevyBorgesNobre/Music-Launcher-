@@ -7,7 +7,6 @@ export interface MusicContextType{
     setLoop: (value: boolean) => void;
     startFirstSong: boolean;
     setStartFirstSong: (value: boolean) => void;
-  
 }
 
 export const MusicContext = createContext<MusicContextType>({
